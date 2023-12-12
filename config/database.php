@@ -17,4 +17,19 @@ class DataBaseConnect extends DotenvDB{
         $this->db_user      = $_ENV['DB_USER'];
         $this->db_password  = $_ENV['DB_PASSWORD'];
     }
+
+    public function connect()
+    {
+        $this->connection = null;
+        try{
+            $this->connection = new PDO("mysql:host=".$this->db_host.";dbname=".$this->db_name,
+                                        $this->db_user,
+                                        $this->db_password);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $this->connection->exec('set names utf8');
+        }catch(PDOException $e){
+            echo 'Error connection '.$e->getMessage();
+        }
+        return $this->connection;
+    }
 }
