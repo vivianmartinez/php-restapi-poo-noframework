@@ -29,6 +29,7 @@ class DataBaseConnect extends DotenvDB{
             $this->connection->exec('set names utf8');
         }catch(PDOException $e){
             echo 'Error connection '.$e->getMessage();
+
         }
         return $this->connection;
     }
