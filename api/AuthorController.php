@@ -69,6 +69,24 @@ class AuthorController{
         }
     }
     /**
+     * Delete author
+     */
+    public function delete()
+    {
+        $this->author->setId($_GET['id']);
+        $find = $this->author->findOne();
+        if(empty($find)){
+            $this->jsonResponse(404,'Author not found');
+            return;
+        }
+        $result = $this->author->delete();
+        $status = 200;
+        if($result['error']){
+            $status = 404;
+        }
+        $this->jsonResponse($status,$result['message']);
+    }
+    /**
      * json response
      */
     public function jsonResponse($status, $data)
