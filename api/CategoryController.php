@@ -47,10 +47,12 @@ class CategoryController{
      */
     public function jsonResponse($status, $data)
     {
-        $response = [
-            'status' => $status,
-            'data'=> $data
-        ];
+        $response = ['status' => $status];
+        if($status != 200){
+            $response['message'] = $data;
+        }else{
+            $response['data'] = $data;
+        };
         echo json_encode($response,http_response_code($status));
     }
 }

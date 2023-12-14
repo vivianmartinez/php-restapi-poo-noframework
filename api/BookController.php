@@ -80,14 +80,34 @@ class BookController{
         }
     }
     /**
+     * Delete book
+     */
+    public function delete()
+    {
+        $this->book->setId($_GET['id']);
+        $find = $this->book->findOne();
+        if(empty($find)){
+            $this->jsonResponse(404,'Book not found');
+            return;
+        }
+        $result = $this->book->delete();
+        $status = 200;
+        if($result['error']){
+            $status = 404;
+        }
+        $this->jsonResponse($status,$result['message']);
+    }
+    /**
      * json response
      */
     public function jsonResponse($status, $data)
     {
-        $response = [
-            'status' => $status,
-            'data'=> $data
-        ];
+        $response = ['status' => $status];
+        if($status != 200){
+            $response['message'] = $data;
+        }else{
+            $response['data'] = $data;
+        };
         echo json_encode($response,http_response_code($status));
     }
 }

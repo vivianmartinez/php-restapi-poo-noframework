@@ -9,6 +9,7 @@ if(count($routes) == 3){
     }else{
         response_error();
     }
-}else{
-    response_error();
+    die();
 }
+
+response_error();
