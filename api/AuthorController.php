@@ -67,7 +67,6 @@ class AuthorController{
         }else{
             $this->jsonResponse(404,'You must send a data json.');
         }
-        
     }
     /**
      * json response
