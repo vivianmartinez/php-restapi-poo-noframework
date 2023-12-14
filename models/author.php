@@ -54,7 +54,7 @@ class Author{
     }
 
     /**
-     * all authors
+     * Find all authors
      */
     public function findAll()
     {
@@ -65,7 +65,7 @@ class Author{
     }
 
     /**
-     * Get single author
+     * Find single author
      */
 
     public function findOne()
@@ -98,7 +98,16 @@ class Author{
      */
     public function update()
     {
-        
+        try{
+            $sql  = 'UPDATE '.$this->table.' SET author_name = :author_name WHERE id = :id';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':id',$this->id,PDO::PARAM_INT);
+            $stmt->bindParam(':author_name',$this->author_name,PDO::PARAM_STR);
+            $stmt->execute();
+        }catch(Exception $e){
+            return ['error'=> true,'message'=>$e->getMessage()];
+        }
+        return false;
     }
     /**
     * Delete author

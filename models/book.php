@@ -110,7 +110,7 @@ class Book{
     }
 
     /**
-     * Get all books
+     * Find all books
      */
     public function findAll()
     {
@@ -127,7 +127,7 @@ class Book{
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
     /**
-     * Get single Book
+     * Find One Book
      */
     public function findOne()
     {

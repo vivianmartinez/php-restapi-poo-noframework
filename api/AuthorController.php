@@ -69,6 +69,13 @@ class AuthorController{
         }
     }
     /**
+     * update author
+     */
+    public function update()
+    {
+        
+    }
+    /**
      * Delete author
      */
     public function delete()
