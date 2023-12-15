@@ -73,7 +73,30 @@ class AuthorController{
      */
     public function update()
     {
-        
+        $this->author->setId($_GET['id']);
+        $find = $this->author->findOne();
+        if(empty($find)){
+            $this->jsonResponse(404,'author not found.');
+            return;
+        }
+        $jsonData = file_get_contents('php://input');
+        $data = json_decode($jsonData,true);
+        if($data !== null){
+            if(array_key_exists('author_name',$data)){
+                $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
+                $result = $this->author->update();
+                if($result['error']){
+                    $this->jsonResponse(500,$result['message']);
+                    return;
+                }
+                $this->jsonResponse(200,$this->author->findOne());
+                return;
+            }else{
+                $this->jsonResponse(500,'Invalid json.');
+                return;
+            }
+        }
+        $this->jsonResponse(500,'Bad request. Empty json');
     }
     /**
      * Delete author

@@ -92,16 +92,26 @@ class BookController{
      */
     public function update()
     {
+        
         $this->book->setId($_GET['id']);
         $find = $this->book->findOne();
         if(empty($find))
         {
-            $this->jsonResponse(404,'Book not found');
+            $this->jsonResponse(404,'book not found.');
             return;
         }
         $jsonData = file_get_contents('php://input');
         $data = json_decode($jsonData,true);
         if($data !== null){
+            //compare name of columns with json properties names
+       
+            $validateJson = $this->validateJson($data);
+            if($validateJson){
+                print_r($validateJson);
+                $this->jsonResponse(500,'Invalid json.');
+                return;
+            }
+            
             $this->book->setTitle($find['title']);
             $this->book->setDescription($find['description']);
             $this->book->setAuthorId($find['author_id']);
@@ -123,7 +133,6 @@ class BookController{
                 }
                 $this->book->setAuthorId(htmlspecialchars(strip_tags($data['author_id'])));
             }
-
             if(array_key_exists('category_id',$data)){
                 //validate if exists category id
                 $foreign_entities = ['category'=>$this->category->setId($data['category_id'])];
@@ -204,5 +213,22 @@ class BookController{
             }
         }
         return (Object)$error;
+    }
+    /**
+     * validate json
+     */
+    public function validateJson($data)
+    {
+        $columns = $this->book->columns();
+        $invalid = false;
+        if($columns !== null){
+            foreach($data as $key=>$value)
+            {
+                if(!in_array($key,array_column($columns,'item'))){
+                    $invalid = true;
+                }   
+            }
+        }
+        return $invalid;
     }
 }

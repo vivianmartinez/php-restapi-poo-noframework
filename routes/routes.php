@@ -40,8 +40,8 @@ if($pos_api !== false){
             case 'POST':
                 require_once 'services/post.php';
                 break;
-            case 'PUT':
-                require_once 'services/put.php';
+            case 'PATCH':
+                require_once 'services/patch.php';
                 break;
             case 'DELETE':
                 require_once 'services/delete.php';

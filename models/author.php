@@ -107,7 +107,7 @@ class Author{
         }catch(Exception $e){
             return ['error'=> true,'message'=>$e->getMessage()];
         }
-        return false;
+        return ['error'=> false];
     }
     /**
     * Delete author

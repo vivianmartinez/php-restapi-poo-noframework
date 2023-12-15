@@ -7,6 +7,7 @@ class Book{
     //DB
     private $connection;
     private $table;
+    private $db;
     public $id;
     public $title;
     public $description;
@@ -16,8 +17,8 @@ class Book{
     public function __construct()
     {
         $this->table = 'book';
-        $db = new DataBaseConnect();
-        $this->connection = $db->connect();
+        $this->db = new DataBaseConnect();
+        $this->connection = $this->db->connect();
     }
 
     /**
@@ -202,5 +203,16 @@ class Book{
             return ['error'=> true,'message'=>$e->getMessage()];
         }
         return ['error'=> false,'message'=>'The book was delete succesfully'];
+    }
+    /**
+     * get columns table book
+     */
+    public function columns()
+    {
+        $columns = $this->db->columnsTable('book');
+        if(empty($columns)){
+            return null;
+        }
+        return $columns;
     }
 }

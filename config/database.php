@@ -33,4 +33,13 @@ class DataBaseConnect extends DotenvDB{
         }
         return $this->connection;
     }
+
+    public function columnsTable($table)
+    {
+        $query = $this->connect()->query("SELECT COLUMN_NAME AS item 
+                                            FROM information_schema.columns 
+                                            WHERE table_schema = '$this->db_name' AND table_name = '$table'")
+                                            ->fetchAll(PDO::FETCH_OBJ);
+        return $query;
+    }
 }
