@@ -59,7 +59,7 @@ class AuthorController{
                     $find = $this->author->findOne();
                     $this->jsonResponse(200,$find);
                 }else{
-                    $this->jsonResponse(404,'Something bad happened. Can\'t create new book.');
+                    $this->jsonResponse(404,'Something bad happened. Can\'t create new author.');
                 }
             }else{
                 $this->jsonResponse(403,'author_name cannot be null');

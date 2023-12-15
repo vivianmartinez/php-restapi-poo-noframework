@@ -74,4 +74,25 @@ class Category{
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    /**
+     * create new category
+     */
+    public function create()
+    {
+        $sql = 'INSERT INTO '.$this->table.' (name) VALUES (:name)';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':name',$this->category_name,PDO::PARAM_STR);
+        if($stmt->execute()){
+            $this->setId($this->connection->lastInsertId());
+            return true;
+        }
+        return false;
+    }
+    /**
+     * delete category
+     */
+    public function delete()
+    {
+
+    }
 }

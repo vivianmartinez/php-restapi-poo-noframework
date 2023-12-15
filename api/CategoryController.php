@@ -43,6 +43,33 @@ class CategoryController{
         }  
     }
     /**
+    * create category
+    */
+    public function create()
+    {
+        $jsonData = file_get_contents('php://input');
+        // Decode the JSON data into a PHP associative array
+        $data = json_decode($jsonData, true);
+        if($data !== null){ 
+            if(array_key_exists('category_name',$data)){
+                $this->category->setCategoryName(htmlspecialchars(strip_tags($data['category_name'])));
+               
+                $result = $this->category->create();
+
+                if($result){
+                    $find = $this->category->findOne();
+                    $this->jsonResponse(200,$find);
+                }else{
+                    $this->jsonResponse(404,'Something bad happened. Can\'t create new category.');
+                }
+            }else{
+                $this->jsonResponse(403,'category_name cannot be null');
+            }
+        }else{
+            $this->jsonResponse(404,'You must send a data json.');
+        }
+    }
+    /**
      * json response
      */
     public function jsonResponse($status, $data)
