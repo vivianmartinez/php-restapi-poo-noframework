@@ -9,6 +9,7 @@ header('Content-Type: application/json');
 require_once 'api/BookController.php';
 require_once 'api/AuthorController.php';
 require_once 'api/CategoryController.php';
+require_once 'config/validator/validatorRequest.php';
 
 //error response
 function response_error(){

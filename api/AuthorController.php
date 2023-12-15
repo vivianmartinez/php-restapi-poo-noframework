@@ -1,5 +1,6 @@
 <?php
 
+use config\validator\ValidatorRequest;
 
 class AuthorController{
 
@@ -82,19 +83,26 @@ class AuthorController{
         $jsonData = file_get_contents('php://input');
         $data = json_decode($jsonData,true);
         if($data !== null){
-            if(array_key_exists('author_name',$data)){
-                $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
-                $result = $this->author->update();
-                if($result['error']){
-                    $this->jsonResponse(500,$result['message']);
-                    return;
-                }
-                $this->jsonResponse(200,$this->author->findOne());
-                return;
-            }else{
+            //validate columns 
+            $validateRequest = ValidatorRequest::validateRequest($this->author,$data);
+            if($validateRequest){
                 $this->jsonResponse(500,'Invalid json.');
                 return;
             }
+            if(array_key_exists('author_name',$data)){
+                if(is_string($data['author_name'])){
+                    $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
+                    $result = $this->author->update();
+                    if($result['error']){
+                        $this->jsonResponse(500,$result['message']);
+                        return;
+                    }
+                    $this->jsonResponse(200,$this->author->findOne());
+                    return;
+                }
+            }
+            $this->jsonResponse(500,'Invalid json.');
+            return;
         }
         $this->jsonResponse(500,'Bad request. Empty json');
     }

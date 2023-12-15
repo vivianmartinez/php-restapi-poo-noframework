@@ -1,5 +1,6 @@
 <?php
 
+use config\validator\ValidatorRequest;
 
 class BookController{
     private $book;
@@ -91,8 +92,7 @@ class BookController{
      * Update book
      */
     public function update()
-    {
-        
+    {  
         $this->book->setId($_GET['id']);
         $find = $this->book->findOne();
         if(empty($find))
@@ -104,19 +104,17 @@ class BookController{
         $data = json_decode($jsonData,true);
         if($data !== null){
             //compare name of columns with json properties names
-       
-            $validateJson = $this->validateJson($data);
-            if($validateJson){
-                print_r($validateJson);
+            $validateRequest = ValidatorRequest::validateRequest($this->book,$data);
+            if($validateRequest){
                 $this->jsonResponse(500,'Invalid json.');
                 return;
             }
-            
+            // set original values
             $this->book->setTitle($find['title']);
             $this->book->setDescription($find['description']);
             $this->book->setAuthorId($find['author_id']);
             $this->book->setCategoryId($find['category_id']);
-            //verify data sended
+            // verify data sended
             if(array_key_exists('title',$data)){
                 $this->book->setTitle(htmlspecialchars(strip_tags($data['title'])));
             }
@@ -213,22 +211,5 @@ class BookController{
             }
         }
         return (Object)$error;
-    }
-    /**
-     * validate json
-     */
-    public function validateJson($data)
-    {
-        $columns = $this->book->columns();
-        $invalid = false;
-        if($columns !== null){
-            foreach($data as $key=>$value)
-            {
-                if(!in_array($key,array_column($columns,'item'))){
-                    $invalid = true;
-                }   
-            }
-        }
-        return $invalid;
     }
 }

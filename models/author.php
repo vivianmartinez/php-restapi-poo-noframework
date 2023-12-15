@@ -7,14 +7,15 @@ class Author{
     //DB
     private $connection;
     private $table;
+    private $db;
     public $id;
     public $author_name;
 
     public function __construct()
     {
         $this->table = 'author';
-        $db = new DataBaseConnect();
-        $this->connection = $db->connect();
+        $this->db = new DataBaseConnect();
+        $this->connection = $this->db->connect();
     }
 
     /**
@@ -124,6 +125,17 @@ class Author{
             return ['error'=> true,'message'=>$e->getMessage()];
         }
         return ['error'=> false,'message'=>'The author was delete succesfully'];
+    }
+    /**
+     * get columns table author
+     */
+    public function columns()
+    {
+        $columns = $this->db->columnsTable('author');
+        if(empty($columns)){
+            return null;
+        }
+        return $columns;
     }
 
 }

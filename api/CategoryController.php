@@ -70,6 +70,14 @@ class CategoryController{
         }
     }
     /**
+     * update category
+     */
+    public function update()
+    {
+        $jsonData = file_get_contents('php://input');
+        
+    }
+    /**
      * json response
      */
     public function jsonResponse($status, $data)
