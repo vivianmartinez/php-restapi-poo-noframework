@@ -1,7 +1,9 @@
 <?php
 
 use config\validator\ValidatorRequest;
+use config\validator\ValidatorTypes;
 use Service\HttpService\Request;
+
 
 class AuthorController{
 
@@ -52,15 +54,18 @@ class AuthorController{
             return;
         }
         if(array_key_exists('author_name',$data)){
-            $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
-            
-            $result = $this->author->create();
+            $validateType = ValidatorTypes::validateTypeAuthor($data);
+            if($validateType){
+                $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
+                
+                $result = $this->author->create();
 
-            if($result){
-                $find = $this->author->findOne();
-                $this->jsonResponse(200,$find);
-            }else{
-                $this->jsonResponse(500,'Something bad happened. Can\'t create new author.');
+                if($result){
+                    $find = $this->author->findOne();
+                    $this->jsonResponse(200,$find);
+                }else{
+                    $this->jsonResponse(500,'Something bad happened. Can\'t create new author.');
+                }
             }
         }else{
             $this->jsonResponse(404,'author_name cannot be null');
@@ -89,7 +94,8 @@ class AuthorController{
             return;
         }
         if(array_key_exists('author_name',$data)){
-            if(is_string($data['author_name'])){
+            $validateType = ValidatorTypes::validateTypeAuthor($data);
+            if($validateType){
                 $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
                 $result = $this->author->update();
                 if($result['error']){
@@ -99,6 +105,9 @@ class AuthorController{
                 $this->jsonResponse(200,$this->author->findOne());
                 return;
             }
+        }else{
+            $this->jsonResponse(404,'author_name cannot be null');
+            return;
         }
         $this->jsonResponse(500,'Invalid json.');     
     }

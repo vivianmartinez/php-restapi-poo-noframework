@@ -16,13 +16,5 @@ class Request{
         $jsonData = file_get_contents('php://input');
         $data = json_decode($jsonData,true);
         $this->data = $data;
-        /*
-        if($_SERVER['REQUEST_METHOD'] == 'POST' 
-            || $_SERVER['REQUEST_METHOD'] = 'PATCH'){
-            $jsonData = file_get_contents('php://input');
-            $data = json_decode($jsonData,true);
-            $this->request = $data;
-        }
-        */
     }
 }

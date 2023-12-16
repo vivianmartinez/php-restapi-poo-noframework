@@ -1,7 +1,9 @@
 <?php
 
 use config\validator\ValidatorRequest;
+use config\validator\ValidatorTypes;
 use Service\HttpService\Request;
+
 
 class CategoryController{
 
@@ -53,19 +55,26 @@ class CategoryController{
         }
 
         if(array_key_exists('category_name',$data)){
-            $this->category->setCategoryName(htmlspecialchars(strip_tags($data['category_name'])));
-            
-            $result = $this->category->create();
+            $validateType = ValidatorTypes::validateTypeCategory($data);
+            if($validateType){
+                $this->category->setCategoryName(htmlspecialchars(strip_tags($data['category_name'])));
+                
+                $result = $this->category->create();
 
-            if($result){
-                $find = $this->category->findOne();
-                $this->jsonResponse(200,$find);
-            }else{
-                $this->jsonResponse(500,'Something bad happened. Can\'t create new category.');
+                if($result){
+                    $find = $this->category->findOne();
+                    $this->jsonResponse(200,$find);
+                    return;
+                }else{
+                    $this->jsonResponse(500,'Something bad happened. Can\'t create new category.');
+                    return;
+                }
             }
         }else{
             $this->jsonResponse(404,'category_name cannot be null');
+            return;
         }
+        $this->jsonResponse(500,'Invalid json.');  
     
     }
     /**
@@ -93,7 +102,8 @@ class CategoryController{
         }
 
         if(array_key_exists('category_name',$data)){
-            if(is_string($data['category_name'])){
+            $validateType = ValidatorTypes::validateTypeCategory($data);
+            if($validateType){
                 $this->category->setCategoryName(htmlspecialchars(strip_tags($data['category_name'])));
                 $result = $this->category->update();
                 if($result['error']){
