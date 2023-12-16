@@ -1,10 +1,11 @@
 <?php
 
+
 $response = new $controller();
 
 if(strpos($routes[1],'?') !== false){
-    if(isset($_GET['id'])){
-        $response->single($_GET['id']);  
+    if(isset($_GET['id']) && $_GET['id'] !== null ){
+        $response->single(); 
     }else{
         response_error();
     }

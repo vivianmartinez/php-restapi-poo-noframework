@@ -3,9 +3,10 @@ namespace config\validator;
 
 class ValidatorRequest
 {
-    static public function validateRequest($entity,$data)
+    static public function validateRequest($table,$data)
     {
-        $columns = $entity->columns();
+        //check if any of properties sent in json is not a column
+        $columns = $table->columns();
         $invalid = false;
         if($columns !== null){
             foreach($data as $key=>$value)

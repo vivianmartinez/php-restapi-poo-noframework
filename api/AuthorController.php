@@ -1,15 +1,18 @@
 <?php
 
 use config\validator\ValidatorRequest;
+use Service\HttpService\Request;
 
 class AuthorController{
 
     private $author;
+    public $request;
 
     public function __construct()
     {
         //instantiate author object
         $this->author = new Author();
+        $this->request = new Request();
     }
     /**
      * get all authors
@@ -28,45 +31,39 @@ class AuthorController{
      * get single author
      */
 
-    public function single($id)
+    public function single()
     {
-        $this->author->id = $id;
-        if($this->author->id === null){
-            $this->jsonResponse(500,'you must send the id parameter');
-        }else{
-            $find = $this->author->findOne();
-            if(empty($find)){
-                $this->jsonResponse(404,'Not found.');
-                return;
-            }
-            $this->jsonResponse(200,$find);
-        }  
+        $this->author->setId($this->request->id);
+        $find = $this->author->findOne();
+        if(empty($find)){
+            $this->jsonResponse(404,'Author not found.');
+            return;
+        }
+        $this->jsonResponse(200,$find);
     }
     /**
      * create author
      */
     public function create()
     {
-        $jsonData = file_get_contents('php://input');
-        // Decode the JSON data into a PHP associative array
-        $data = json_decode($jsonData, true);
-        if($data !== null){ 
-            if(array_key_exists('author_name',$data)){
-                $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
-               
-                $result = $this->author->create();
+        $data = $this->request->data;
+        if($data == null){
+            $this->jsonResponse(500,'Bad request. Empty json');
+            return;
+        }
+        if(array_key_exists('author_name',$data)){
+            $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
+            
+            $result = $this->author->create();
 
-                if($result){
-                    $find = $this->author->findOne();
-                    $this->jsonResponse(200,$find);
-                }else{
-                    $this->jsonResponse(404,'Something bad happened. Can\'t create new author.');
-                }
+            if($result){
+                $find = $this->author->findOne();
+                $this->jsonResponse(200,$find);
             }else{
-                $this->jsonResponse(403,'author_name cannot be null');
+                $this->jsonResponse(500,'Something bad happened. Can\'t create new author.');
             }
         }else{
-            $this->jsonResponse(404,'You must send a data json.');
+            $this->jsonResponse(404,'author_name cannot be null');
         }
     }
     /**
@@ -74,37 +71,36 @@ class AuthorController{
      */
     public function update()
     {
-        $this->author->setId($_GET['id']);
+        $this->author->setId($this->request->id);
         $find = $this->author->findOne();
         if(empty($find)){
             $this->jsonResponse(404,'author not found.');
             return;
         }
-        $jsonData = file_get_contents('php://input');
-        $data = json_decode($jsonData,true);
-        if($data !== null){
-            //validate columns 
-            $validateRequest = ValidatorRequest::validateRequest($this->author,$data);
-            if($validateRequest){
-                $this->jsonResponse(500,'Invalid json.');
-                return;
-            }
-            if(array_key_exists('author_name',$data)){
-                if(is_string($data['author_name'])){
-                    $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
-                    $result = $this->author->update();
-                    if($result['error']){
-                        $this->jsonResponse(500,$result['message']);
-                        return;
-                    }
-                    $this->jsonResponse(200,$this->author->findOne());
-                    return;
-                }
-            }
+        $data = $this->request->data;
+        if($data == null){
+            $this->jsonResponse(500,'Bad request. Empty json');
+            return;
+        }
+        //validate json properties
+        $validateRequest = ValidatorRequest::validateRequest($this->author,$data);
+        if($validateRequest){
             $this->jsonResponse(500,'Invalid json.');
             return;
         }
-        $this->jsonResponse(500,'Bad request. Empty json');
+        if(array_key_exists('author_name',$data)){
+            if(is_string($data['author_name'])){
+                $this->author->setAuthorName(htmlspecialchars(strip_tags($data['author_name'])));
+                $result = $this->author->update();
+                if($result['error']){
+                    $this->jsonResponse(500,$result['message']);
+                    return;
+                }
+                $this->jsonResponse(200,$this->author->findOne());
+                return;
+            }
+        }
+        $this->jsonResponse(500,'Invalid json.');     
     }
     /**
      * Delete author

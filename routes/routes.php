@@ -10,6 +10,8 @@ require_once 'api/BookController.php';
 require_once 'api/AuthorController.php';
 require_once 'api/CategoryController.php';
 require_once 'config/validator/validatorRequest.php';
+require_once 'config/validator/validatorTypes.php';
+require_once 'service/httpservice/request.php';
 
 //error response
 function response_error(){
@@ -36,16 +38,16 @@ if($pos_api !== false){
         switch($_SERVER['REQUEST_METHOD'])
         {
             case 'GET':
-                require_once 'services/get.php';
+                require_once 'service/get.php';
                 break;
             case 'POST':
-                require_once 'services/post.php';
+                require_once 'service/post.php';
                 break;
             case 'PATCH':
-                require_once 'services/patch.php';
+                require_once 'service/patch.php';
                 break;
             case 'DELETE':
-                require_once 'services/delete.php';
+                require_once 'service/delete.php';
                 break;
             default:
                 response_error();

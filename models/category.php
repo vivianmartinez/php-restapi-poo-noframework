@@ -7,14 +7,15 @@ class Category{
     //DB
     private $connection;
     private $table;
+    private $db;
     public $id;
     public $category_name;
 
     public function __construct()
     {
         $this->table = 'category';
-        $db = new DataBaseConnect();
-        $this->connection = $db->connect();
+        $this->db = new DataBaseConnect();
+        $this->connection = $this->db->connect();
     }
 
     /**
@@ -89,10 +90,28 @@ class Category{
         return false;
     }
     /**
+     * update category
+     */
+    public function update()
+    {
+
+    }
+    /**
      * delete category
      */
     public function delete()
     {
 
+    }
+    /**
+     * get columns table category
+     */
+    public function columns()
+    {
+        $columns = $this->db->columnsTable('category');
+        if(empty($columns)){
+            return null;
+        }
+        return $columns;
     }
 }
