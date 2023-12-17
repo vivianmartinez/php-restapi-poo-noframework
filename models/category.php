@@ -58,7 +58,7 @@ class Category{
      */
     public function findAll()
     {
-        $sql = 'SELECT * FROM '.$this->table;
+        $sql  = 'SELECT * FROM '.$this->table;
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -80,7 +80,7 @@ class Category{
      */
     public function create()
     {
-        $sql = 'INSERT INTO '.$this->table.' (name) VALUES (:name)';
+        $sql  = 'INSERT INTO '.$this->table.' (name) VALUES (:name)';
         $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':name',$this->category_name,PDO::PARAM_STR);
         if($stmt->execute()){
@@ -94,14 +94,30 @@ class Category{
      */
     public function update()
     {
-
+        $sql  = 'UPDATE '.$this->table.' SET name = :name WHERE id = :id';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':id',$this->id,PDO::PARAM_INT);
+        $stmt->bindParam(':name',$this->category_name,PDO::PARAM_STR);
+        if($stmt->execute()){
+            return true;
+        }
+        return false;
     }
     /**
      * delete category
      */
     public function delete()
     {
-
+        try{
+            $sql  = 'DELETE FROM '.$this->table.' WHERE id = :id';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':id',$this->id,PDO::PARAM_INT);
+            $stmt->execute();
+        }catch(Exception $e)
+        {
+            return ['error'=> true,'message'=>$e->getMessage()];
+        }
+        return ['error'=> false,'message'=>'The category was delete succesfully'];
     }
     /**
      * get columns table category

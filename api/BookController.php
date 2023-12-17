@@ -95,7 +95,7 @@ class BookController{
         $this->book->setId($this->request->id);
         $find = $this->book->findOne();
         if(empty($find)){
-            $this->jsonResponse(404,'book not found.');
+            $this->jsonResponse(404,'Book not found.');
             return;
         }
         $data = $this->request->data;
@@ -103,7 +103,6 @@ class BookController{
             $this->jsonResponse(500,'Bad request. Empty json');
             return;
         }
-
         //compare name of columns with json properties names
         $validateRequest = ValidatorRequest::validateRequest($this->book,$data);
         if($validateRequest){

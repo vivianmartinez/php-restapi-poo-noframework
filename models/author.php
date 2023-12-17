@@ -59,7 +59,7 @@ class Author{
      */
     public function findAll()
     {
-        $sql = 'SELECT * FROM '.$this->table;
+        $sql  = 'SELECT * FROM '.$this->table;
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -71,7 +71,7 @@ class Author{
 
     public function findOne()
     {
-        $sql = 'SELECT a.id, a.author_name FROM '.$this->table.' a WHERE id = :id';
+        $sql  = 'SELECT a.id, a.author_name FROM '.$this->table.' a WHERE id = :id';
         $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':id',$this->id,PDO::PARAM_INT);
         $stmt->execute();
@@ -116,7 +116,7 @@ class Author{
     public function delete()
     {
         try{
-            $sql = 'DELETE FROM '.$this->table.' WHERE id = :id';
+            $sql  = 'DELETE FROM '.$this->table.' WHERE id = :id';
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':id',$this->id,PDO::PARAM_INT);
             $stmt->execute();

@@ -29,7 +29,7 @@ class ValidatorTypes
     //validate type data category
     static public function validateTypeCategory($data)
     {
-        if(is_string($data['category_name'])){
+        if(is_string($data['name'])){
             return true;
         }
         return false;

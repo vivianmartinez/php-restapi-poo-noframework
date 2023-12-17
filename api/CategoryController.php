@@ -54,10 +54,10 @@ class CategoryController{
             return;
         }
 
-        if(array_key_exists('category_name',$data)){
+        if(array_key_exists('name',$data)){
             $validateType = ValidatorTypes::validateTypeCategory($data);
             if($validateType){
-                $this->category->setCategoryName(htmlspecialchars(strip_tags($data['category_name'])));
+                $this->category->setCategoryName(htmlspecialchars(strip_tags($data['name'])));
                 
                 $result = $this->category->create();
 
@@ -71,7 +71,7 @@ class CategoryController{
                 }
             }
         }else{
-            $this->jsonResponse(404,'category_name cannot be null');
+            $this->jsonResponse(404,'name cannot be null');
             return;
         }
         $this->jsonResponse(500,'Invalid json.');  
@@ -90,7 +90,7 @@ class CategoryController{
         }
         $data = $this->request->data;
         if($data == null){
-            $this->jsonResponse(500,'Bad request. Empty json');
+            $this->jsonResponse(500,'Bad request, empty json.');
             return;
         }
         //validate json properties
@@ -101,20 +101,40 @@ class CategoryController{
             return;
         }
 
-        if(array_key_exists('category_name',$data)){
+        if(array_key_exists('name',$data)){
+            
             $validateType = ValidatorTypes::validateTypeCategory($data);
             if($validateType){
-                $this->category->setCategoryName(htmlspecialchars(strip_tags($data['category_name'])));
+                
+                $this->category->setCategoryName(htmlspecialchars(strip_tags($data['name'])));
                 $result = $this->category->update();
-                if($result['error']){
-                    $this->jsonResponse(500,$result['message']);
+                if(!$result){
+                    $this->jsonResponse(500,'Something bad happend. Can\'t update category.');
                     return;
                 }
-                $this->jsonResponse(100,$this->category->findOne());
+                $this->jsonResponse(200,$this->category->findOne());
                 return;
             }
         }
         $this->jsonResponse(500,'Invalid json.');
+    }
+    /**
+     * Delete category
+     */
+    public function delete()
+    {
+        $this->category->setId($this->request->id);
+        $find = $this->category->findOne();
+        if(empty($find)){
+            $this->jsonResponse(404,'Category not found');
+            return;
+        }
+        $result = $this->category->delete();
+        $status = 200;
+        if($result['error']){
+            $status = 404;
+        }
+        $this->jsonResponse($status,$result['message']);
     }
     /**
      * json response

@@ -2,7 +2,7 @@
 
 //Headers
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods:', 'GET,POST,PUT,DELETE');
+header('Access-Control-Allow-Methods:', 'GET,POST,PATCH,DELETE');
 header('Content-Type: application/json');
 
 //controllers 
@@ -20,7 +20,7 @@ function response_error(){
             'message' => 'Bad Request'
             );
     echo json_encode($json, http_response_code($json["status"]));
-    return;
+    exit();
 }
 
 $routes_url = $_SERVER['REQUEST_URI'];
@@ -34,6 +34,9 @@ if($pos_api !== false){
         $routes = array_values($routes);
         //select controller
         $controller = RouteController::selectController($routes);
+        if($controller == null){
+            return response_error();
+        }
 
         switch($_SERVER['REQUEST_METHOD'])
         {

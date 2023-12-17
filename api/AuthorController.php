@@ -50,7 +50,7 @@ class AuthorController{
     {
         $data = $this->request->data;
         if($data == null){
-            $this->jsonResponse(500,'Bad request. Empty json');
+            $this->jsonResponse(500,'Bad request, empty json.');
             return;
         }
         if(array_key_exists('author_name',$data)){
@@ -79,18 +79,18 @@ class AuthorController{
         $this->author->setId($this->request->id);
         $find = $this->author->findOne();
         if(empty($find)){
-            $this->jsonResponse(404,'author not found.');
+            $this->jsonResponse(404,'Author not found.');
             return;
         }
         $data = $this->request->data;
         if($data == null){
-            $this->jsonResponse(500,'Bad request. Empty json');
+            $this->jsonResponse(500,'Bad request, empty json.');
             return;
         }
         //validate json properties
         $validateRequest = ValidatorRequest::validateRequest($this->author,$data);
         if($validateRequest){
-            $this->jsonResponse(500,'Invalid json.');
+            $this->jsonResponse(500,'invalid json.');
             return;
         }
         if(array_key_exists('author_name',$data)){
@@ -116,7 +116,7 @@ class AuthorController{
      */
     public function delete()
     {
-        $this->author->setId($_GET['id']);
+        $this->author->setId($this->request->id);
         $find = $this->author->findOne();
         if(empty($find)){
             $this->jsonResponse(404,'Author not found');
