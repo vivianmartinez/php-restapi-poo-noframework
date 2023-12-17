@@ -3,12 +3,14 @@
 use config\validator\ValidatorRequest;
 use config\validator\ValidatorTypes;
 use Service\HttpService\Request;
+use Service\HttpService\JsonResponse;
 
 class BookController{
     private $book;
     private $author;
     private $category;
-    public $request;
+    public  $request;
+    public  $jsonResponse;
 
     public function __construct()
     {
@@ -17,6 +19,7 @@ class BookController{
         $this->author = new Author();
         $this->category = new Category();
         $this->request = new Request();
+        $this->jsonResponse = new JsonResponse();
     }
     /**
      * get all books
@@ -26,9 +29,9 @@ class BookController{
         //Book query
         $list_books = $this->book->findAll();
         if(!empty($list_books)){
-            $this->jsonResponse(200,$list_books);
+            $this->jsonResponse->json(200,$list_books);
         }else{
-            $this->jsonResponse(404,'No data.');
+            $this->jsonResponse->json(404,'No data.');
         }
     }
     /**
@@ -39,10 +42,9 @@ class BookController{
         $this->book->setId($this->request->id);
         $find = $this->book->findOne();
         if(empty($find)){
-            $this->jsonResponse(404,'Book not found.');
-            return;
+            $this->jsonResponse->json(404,'Book not found.');
         }
-        $this->jsonResponse(200,$find);
+        $this->jsonResponse->json(200,$find);
     }
     /**
      * create book
@@ -51,15 +53,13 @@ class BookController{
     {
         $data = $this->request->data;
         if($data == null){
-            $this->jsonResponse(500,'Bad request. Empty json');
-            return;
+            $this->jsonResponse->json(500,'Bad request. Empty json');
         }
         //verify if user send required fields 
         $not_null_fields = ['title','author_id','category_id'];
         $validate = $this->validate($data,$not_null_fields);
         if($validate->error){
-            $this->jsonResponse($validate->status,$validate->message);
-            return;
+            $this->jsonResponse->json($validate->status,$validate->message);
         }
         $this->book->setTitle(htmlspecialchars(strip_tags($data['title'])));
         //description can be null
@@ -72,8 +72,7 @@ class BookController{
 
         $validateForeign = $this->validateForeign($foreign_entities);
         if($validateForeign->error){
-            $this->jsonResponse($validateForeign->status,$validateForeign->message);
-            return;
+            $this->jsonResponse->json($validateForeign->status,$validateForeign->message);
         }
 
         $this->book->setAuthorId(htmlspecialchars(strip_tags($data['author_id'])));
@@ -82,9 +81,9 @@ class BookController{
         $result = $this->book->create();
         if($result){
             $find = $this->book->findOne();
-            $this->jsonResponse(200,$find);
+            $this->jsonResponse->json(200,$find);
         }else{
-            $this->jsonResponse(500,'Something bad happened. Can\'t create new book.');
+            $this->jsonResponse->json(500,'Something bad happened. Can\'t create new book.');
         }
     }
     /**
@@ -95,19 +94,16 @@ class BookController{
         $this->book->setId($this->request->id);
         $find = $this->book->findOne();
         if(empty($find)){
-            $this->jsonResponse(404,'Book not found.');
-            return;
+            $this->jsonResponse->json(404,'Book not found.');
         }
         $data = $this->request->data;
         if($data == null){
-            $this->jsonResponse(500,'Bad request. Empty json');
-            return;
+            $this->jsonResponse->json(500,'Bad request. Empty json');
         }
         //compare name of columns with json properties names
         $validateRequest = ValidatorRequest::validateRequest($this->book,$data);
         if($validateRequest){
-            $this->jsonResponse(500,'Invalid json.');
-            return;
+            $this->jsonResponse->json(500,'Invalid json.');
         }
         // set original values
         $this->book->setTitle($find['title']);
@@ -117,8 +113,7 @@ class BookController{
         // validate types 
         $validateType = ValidatorTypes::validateTypeBook($data);
         if(!$validateType){
-            $this->jsonResponse(500,'Invalid json type not correct.');
-            return;
+            $this->jsonResponse->json(500,'Invalid json type not correct.');
         }
         if(array_key_exists('title',$data)){
             $this->book->setTitle(htmlspecialchars(strip_tags($data['title'])));
@@ -131,8 +126,7 @@ class BookController{
             $foreign_entities = ['author' =>$this->author->setId($data['author_id'])];
             $validateForeign = $this->validateForeign($foreign_entities);
             if($validateForeign->error){
-                $this->jsonResponse($validateForeign->status,$validateForeign->message);
-                return;
+                $this->jsonResponse->json($validateForeign->status,$validateForeign->message);
             }
             $this->book->setAuthorId(htmlspecialchars(strip_tags($data['author_id'])));
         }
@@ -141,18 +135,16 @@ class BookController{
             $foreign_entities = ['category'=>$this->category->setId($data['category_id'])];
             $validateForeign = $this->validateForeign($foreign_entities);
             if($validateForeign->error){
-                $this->jsonResponse($validateForeign->status,$validateForeign->message);
-                return;
+                $this->jsonResponse->json($validateForeign->status,$validateForeign->message);
             }
             $this->book->setCategoryId(htmlspecialchars(strip_tags($data['category_id'])));
         }
         //update data
         $result = $this->book->update();
         if($result['error']){
-            $this->jsonResponse(500,$result['message']);
-            return;
+            $this->jsonResponse->json(500,$result['message']);
         }
-        $this->jsonResponse(200,$this->book->findOne());
+        $this->jsonResponse->json(200,$this->book->findOne());
     }
     /**
      * Delete book
@@ -162,28 +154,14 @@ class BookController{
         $this->book->setId($this->request->id);
         $find = $this->book->findOne();
         if(empty($find)){
-            $this->jsonResponse(404,'Book not found');
-            return;
+            $this->jsonResponse->json(404,'Book not found');
         }
         $result = $this->book->delete();
         $status = 200;
         if($result['error']){
             $status = 404;
         }
-        $this->jsonResponse($status,$result['message']);
-    }
-    /**
-     * json response
-     */
-    public function jsonResponse($status, $data)
-    {
-        $response = ['status' => $status];
-        if($status != 200){
-            $response['message'] = $data;
-        }else{
-            $response['data'] = $data;
-        };
-        echo json_encode($response,http_response_code($status));
+        $this->jsonResponse->json($status,$result['message']);
     }
     /**
      * Validate data book
