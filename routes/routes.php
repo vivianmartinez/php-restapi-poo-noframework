@@ -9,33 +9,29 @@ header('Content-Type: application/json');
 require_once 'api/BookController.php';
 require_once 'api/AuthorController.php';
 require_once 'api/CategoryController.php';
+//validators - service
 require_once 'config/validator/validatorRequest.php';
 require_once 'config/validator/validatorTypes.php';
 require_once 'service/httpservice/request.php';
+require_once 'service/httpservice/jsonresponse.php';
 
-//error response
-function response_error(){
-    $json = array(
-            'status' => 500,
-            'message' => 'Bad Request'
-            );
-    echo json_encode($json, http_response_code($json["status"]));
-    exit();
-}
+use Service\HttpService\JsonResponse;
 
 $routes_url = $_SERVER['REQUEST_URI'];
 $pos_api = strpos($routes_url,'/api/');
 
+$json_response = new JsonResponse();
+
 if($pos_api !== false){
     $routes = array_filter(explode('/',substr($routes_url,$pos_api)));
     if(empty($routes) || count($routes) < 2 || !isset($_SERVER['REQUEST_METHOD'])){
-        response_error();
+        $json_response->json(500,'Bad request.');
     }else{
         $routes = array_values($routes);
         //select controller
         $controller = RouteController::selectController($routes);
         if($controller == null){
-            return response_error();
+            $json_response->json(500,'Bad request.');
         }
 
         switch($_SERVER['REQUEST_METHOD'])
@@ -53,9 +49,9 @@ if($pos_api !== false){
                 require_once 'service/delete.php';
                 break;
             default:
-                response_error();
+                $json_response->json(500,'Bad request.');
         }
     }
 }else{
-    response_error();
+    $json_response->json(500,'Bad request.');
 }

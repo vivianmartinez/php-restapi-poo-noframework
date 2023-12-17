@@ -3,12 +3,10 @@
 $response = new $controller();
 
 if(strpos($routes[1],'?') !== false){
-    if(isset($_GET['id'])){
-        $response->delete();
-    }else{
-        response_error();
+    if(! isset($_GET['id'])){
+        $json_response->json(500,'Bad request. You must send Id parameter.');
     }
-    die();
+    $response->delete();
 }
 
-response_error();
+$json_response->json(500,'Bad request.');
