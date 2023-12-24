@@ -91,13 +91,13 @@ Response:
 ##### POST
 ```
 //book
-http://localhost/php-rest-api/api/book?id=1
+http://localhost/php-rest-api/api/book/create
 
 //author
-http://localhost/php-rest-api/api/author?id=1
+http://localhost/php-rest-api/api/author/create
 
 //category
-http://localhost/php-rest-api/api/category?id=1
+http://localhost/php-rest-api/api/category/create
 
 ```
 
