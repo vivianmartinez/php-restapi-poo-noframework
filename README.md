@@ -88,7 +88,10 @@ Response:
   }
 }  
 ```
-##### POST
+##### POST 
+
+Requests:
+
 ```
 //book
 http://localhost/php-rest-api/api/book/create
@@ -100,6 +103,36 @@ http://localhost/php-rest-api/api/author/create
 http://localhost/php-rest-api/api/category/create
 
 ```
+Send Json data:
+
+```
+/*
+    Json from book
+    description can be null
+*/
+{
+    "title": "Christmas Eve at Friday Harbor",
+    "author_id": 11,
+    "category_id": 1
+}
+
+/*
+    Json from author
+*/
+{
+    "author_name": "Julia Quinn"
+}
+
+/*
+    Json from category
+*/
+
+{
+    "category_name": "Comedy"
+}
+
+```
+
 
 ##### Error response
 
