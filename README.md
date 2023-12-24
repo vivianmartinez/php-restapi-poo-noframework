@@ -19,11 +19,18 @@ This API allows you manage a bookstore. You can create, update, delete and get i
 
 #### API Requests
 
-#### List all books:
+#### GET List all:
 ```
+//Books
 http://localhost/php-rest-api/api/books
+
+//Authors
+http://localhost/php-rest-api/api/authors
+
+//Category
+http://localhost/php-rest-api/api/categories
 ```
-Response:
+Books response:
 
 ```
 {
@@ -53,9 +60,17 @@ Response:
 }
 ```
 
-##### Get single book:
+##### GET single:
 ```
+//book
 http://localhost/php-rest-api/api/book?id=1
+
+//author
+http://localhost/php-rest-api/api/author?id=1
+
+//category
+http://localhost/php-rest-api/api/category?id=1
+
 ```
 Response:
 
@@ -73,7 +88,20 @@ Response:
   }
 }  
 ```
-Error response:
+##### POST
+```
+//book
+http://localhost/php-rest-api/api/book?id=1
+
+//author
+http://localhost/php-rest-api/api/author?id=1
+
+//category
+http://localhost/php-rest-api/api/category?id=1
+
+```
+
+##### Error response
 
 ```
 {
