@@ -162,6 +162,10 @@ http://localhost/php-rest-api/api/book?id=25
 ```
 http://localhost/php-rest-api/api/author?id=12
 ```
+##### Category
+```
+http://localhost/php-rest-api/api/category?id=7
+```
 ##### Error responses
 ```
 // Bad request
