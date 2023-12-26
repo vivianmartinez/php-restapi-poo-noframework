@@ -137,10 +137,30 @@ http://localhost/php-rest-api/api/book?id=5
 ###### Author
 ```
 http://localhost/php-rest-api/api/author?id=2
+
+//Send Json with field you need to update, in this case "author_name"
 ```
 ###### Category
 ```
 http://localhost/php-rest-api/api/category?id=3
+
+//Send Json with field you need to update, in this case "name"
+```
+#### DELETE
+##### Book
+```
+http://localhost/php-rest-api/api/book?id=25
+```
+##### Response delete book
+```
+{
+    "status": 200,
+    "data": "The book was delete succesfully"
+}
+```
+##### Author
+```
+http://localhost/php-rest-api/api/author?id=12
 ```
 ##### Error responses
 ```
