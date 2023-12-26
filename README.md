@@ -121,7 +121,7 @@ http://localhost/php-rest-api/api/category/create
 ##### JSON Category
 ```
 {
-    "category_name": "Comedy"
+    "name": "Comedy"
 }
 ```
 ##### PATCH - Update
@@ -138,9 +138,11 @@ http://localhost/php-rest-api/api/book?id=5
 ```
 http://localhost/php-rest-api/api/author?id=2
 ```
-
+###### Category
+```
+http://localhost/php-rest-api/api/category?id=3
+```
 ##### Error responses
-
 ```
 // Bad request
 {
