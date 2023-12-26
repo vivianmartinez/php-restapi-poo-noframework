@@ -89,70 +89,74 @@ http://localhost/php-rest-api/api/author?id=1
 http://localhost/php-rest-api/api/category?id=1
 ```
 
-##### POST - Create
+#### POST - Create
 
-Requests:
-
+##### Book
 ```
-//book
 http://localhost/php-rest-api/api/book/create
-
-//author
-http://localhost/php-rest-api/api/author/create
-
-//category
-http://localhost/php-rest-api/api/category/create
-
 ```
-Send Json data:
-
+##### JSON book
 ```
-/*
-    Json from book
-    description can be null
-*/
+// description can be null
 {
     "title": "Christmas Eve at Friday Harbor",
     "author_id": 11,
     "category_id": 1
 }
-
-/*
-    Json from author
-*/
+```
+##### Author
+```
+http://localhost/php-rest-api/api/author/create
+```
+##### JSON Author
+```
 {
     "author_name": "Julia Quinn"
 }
-
-/*
-    Json from category
-*/
-
+```
+##### Category
+```
+http://localhost/php-rest-api/api/category/create
+```
+##### JSON Category
+```
 {
     "category_name": "Comedy"
 }
-
 ```
 ##### PATCH - Update
 ###### Book
-
 ```
-
 http://localhost/php-rest-api/api/book?id=5
 
 //Send Json with fields you need to update
 {
     "title": "THe Fifth Wave"
 }
-
+```
+###### Author
+```
+http://localhost/php-rest-api/api/author?id=2
 ```
 
-##### Error response
+##### Error responses
 
 ```
+// Bad request
 {
     "status": 500,
     "message": "Bad request, you must send Id parameter."
+}
+
+// Invalid JSON
+{
+    "status": 500,
+    "message": "Invalid json."
+}
+// Not found
+{
+    "status": 404,
+    "message": "Book not found."
 }
 ```
 
