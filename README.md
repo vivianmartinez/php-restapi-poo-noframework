@@ -15,7 +15,7 @@ $ composer require vlucas/phpdotenv
 
 ### Project details
 
-This API allows you manage a bookstore. You can create, update, delete and get information about a single book, author or category.
+This API allows you manage a bookstore. You can create, read, update, delete and get information about a single book, author or category.
 
 #### API Requests
 
