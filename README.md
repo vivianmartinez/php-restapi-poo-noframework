@@ -19,19 +19,12 @@ This API allows you manage a bookstore. You can create, update, delete and get i
 
 #### API Requests
 
-#### GET List all:
+#### GET - Read - All:
+##### Book
 ```
-//Books
 http://localhost/php-rest-api/api/books
-
-//Authors
-http://localhost/php-rest-api/api/authors
-
-//Category
-http://localhost/php-rest-api/api/categories
 ```
-Books response:
-
+##### Example response get books:
 ```
 {
     "status": 200,
@@ -59,21 +52,20 @@ Books response:
   ]
 }
 ```
-
-##### GET single:
+##### Author
 ```
-//book
+http://localhost/php-rest-api/api/authors
+```
+##### Category
+```
+http://localhost/php-rest-api/api/categories
+```
+#### GET - Read - Single:
+##### Book
+```
 http://localhost/php-rest-api/api/book?id=1
-
-//author
-http://localhost/php-rest-api/api/author?id=1
-
-//category
-http://localhost/php-rest-api/api/category?id=1
-
 ```
-Response:
-
+##### Example response get single book:
 ```
 {
   "status": 200,
@@ -88,7 +80,16 @@ Response:
   }
 }  
 ```
-##### POST 
+##### Author
+```
+http://localhost/php-rest-api/api/author?id=1
+```
+##### Category
+```
+http://localhost/php-rest-api/api/category?id=1
+```
+
+##### POST - Create
 
 Requests:
 
@@ -132,7 +133,19 @@ Send Json data:
 }
 
 ```
+##### PATCH - Update
+###### Book
 
+```
+
+http://localhost/php-rest-api/api/book?id=5
+
+//Send Json with fields you need to update
+{
+    "title": "THe Fifth Wave"
+}
+
+```
 
 ##### Error response
 
