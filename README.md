@@ -1,8 +1,7 @@
 # PHP REST API - POO - NO FRAMEWORK
 
-This Project is a simple **PHP REST API** made it with no framework.<br>
+This Project is a simple **PHP REST API** made it with no framework.
 The purpose of this project is learn how to create a PHP API without implement a framework and create your own functionalities using **Object Oriented Programming**.
-<br>
 
 ### Install
 
